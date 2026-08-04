@@ -41,17 +41,23 @@ body {
 }
 
 /* ===================================================================
-   Layout — one screen visible at a time, cross-faded between
+   Layout — one screen visible at a time, cross-faded between.
+   Every screen shares the same grid cell (grid-area: 1 / 1) so they
+   stack directly on top of one another. During the crossfade both
+   screens are briefly display:flex at once — as plain flex/block
+   boxes they'd sit side by side and squeeze each other's width for
+   that instant, then snap back, which is what caused the jitter.
+   Stacking them removes the competition for space entirely.
    =================================================================== */
 .wrap {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   padding: 48px 20px;
 }
 
 .screen {
+  grid-area: 1 / 1;
   display: none;
   width: 100%;
   justify-content: center;
@@ -78,6 +84,13 @@ body {
   max-width: 600px;
   width: 100%;
   text-align: center;
+}
+
+/* Plays once, on first load only. script.js removes this class the
+   moment the animation ends, so it can never restart (and collide
+   with the .screen transition above) if this screen is shown again
+   later, e.g. via the Back button. */
+.card--intro {
   animation: card-rise 0.7s ease-out 0.15s backwards;
 }
 
@@ -249,7 +262,7 @@ body {
    Reduced motion
    =================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .card,
+  .card--intro,
   .seal--intro {
     animation: none;
   }
