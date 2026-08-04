@@ -78,7 +78,7 @@ body {
   max-width: 600px;
   width: 100%;
   text-align: center;
-  animation: card-rise 0.7s ease-out 0.15s both;
+  animation: card-rise 0.7s ease-out 0.15s backwards;
 }
 
 @keyframes card-rise {
@@ -215,6 +215,7 @@ body {
   color: var(--ink-soft);
   font-size: 0.88rem;
   padding: 10px 22px;
+  border: 1px solid rgba(110, 27, 49, 0.25);
   z-index: 10;
 }
 
