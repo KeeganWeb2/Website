@@ -1,9 +1,84 @@
-My Home Page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Question For You</title>
+<meta name="description" content="A little note, and a question.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div class="wrap">
 
-  Welcome to my first GitHub website!
-  This is my home page.
-  
-  
-  
-    Go to Page 2
+  <!-- ============================================================= -->
+  <!-- SCREEN 1 — the letter                                          -->
+  <!-- ============================================================= -->
+  <section id="letter-screen" class="screen active visible" aria-label="Letter">
+    <div class="card">
+      <div class="seal seal--intro" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" focusable="false">
+          <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+
+      <h1 class="salutation">Dear <span class="name">[Name]</span>,</h1>
+
+      <svg class="divider" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="0,2 15,10 30,2 45,10 60,2 75,10 90,2 105,10 120,2 135,10 150,2 165,10 180,2 195,10 210,2 225,10 240,2 255,10 270,2 285,10 300,2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <!-- ============================================================ -->
+      <!-- ✏️  EDIT ME — replace these paragraphs with your own words   -->
+      <!-- ============================================================ -->
+      <div class="letter-body">
+        <p>This is your first paragraph — a good place to set the scene. Maybe write about how you met, a moment that stuck with you, or just what's been on your mind lately.</p>
+        <p>This is your second paragraph — a good place to get specific. An inside joke, a memory, or something you've never quite said out loud all work well here.</p>
+        <p>This is your closing paragraph, right before the question below. Wrap up your thoughts here.</p>
+      </div>
+      <!-- END EDIT ME -->
+
+      <p class="question">So, will you?</p>
+
+      <div class="button-row">
+        <button type="button" id="yes-btn" class="btn btn-yes">Yes</button>
+        <button type="button" id="no-btn" class="btn btn-no">No</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- SCREEN 2 — the response, shown after "Yes" is pressed          -->
+  <!-- ============================================================= -->
+  <section id="response-screen" class="screen" aria-label="Response">
+    <div class="card">
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" focusable="false">
+          <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+
+      <h1 class="salutation">I knew it.</h1>
+
+      <svg class="divider" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
+        <polyline points="0,2 15,10 30,2 45,10 60,2 75,10 90,2 105,10 120,2 135,10 150,2 165,10 180,2 195,10 210,2 225,10 240,2 255,10 270,2 285,10 300,2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <!-- ============================================================ -->
+      <!-- ✏️  EDIT ME — replace this paragraph with your own words     -->
+      <!-- ============================================================ -->
+      <div class="letter-body">
+        <p>This is where your reply goes. Now that they've said yes, tell them what happens next, how you're feeling, or just say thank you.</p>
+      </div>
+      <!-- END EDIT ME -->
+    </div>
+  </section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
