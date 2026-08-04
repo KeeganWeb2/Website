@@ -53,11 +53,28 @@ window.addEventListener('resize', () => {
    "Yes" button — cross-fades from the letter to the response screen.
    ----------------------------------------------------------------- */
 function showScreen(hide, show) {
-  hide.classList.remove('visible');
-  hide.addEventListener('transitionend', function onEnd() {
-    hide.classList.remove('active');
+  let finished = false;
+  const finishHide = () => {
+    if (finished) return;
+    finished = true;
     hide.removeEventListener('transitionend', onEnd);
-  }, { once: true });
+    clearTimeout(fallback);
+    hide.classList.remove('active');
+  };
+
+  // Ignore transitions bubbling up from child elements (buttons have their
+  // own hover/focus transitions) — only react to the screen's own fade.
+  const onEnd = (e) => {
+    if (e.target === hide) finishHide();
+  };
+  hide.addEventListener('transitionend', onEnd);
+
+  // Safety net: if transitions are disabled (prefers-reduced-motion, a
+  // backgrounded tab, etc.) transitionend never fires, so fall back to a
+  // timer slightly longer than the CSS transition duration.
+  const fallback = setTimeout(finishHide, 550);
+
+  hide.classList.remove('visible');
 
   show.classList.add('active');
   void show.offsetWidth; // force reflow before transitioning in
