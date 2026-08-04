@@ -1,261 +1,75 @@
-/* ===================================================================
-   Fonts — Fraunces for the voice of the letter, Lora for the body,
-   system sans reserved for the interface (the buttons).
-   =================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+'use strict';
 
-/* ===================================================================
-   Tokens
-   =================================================================== */
-:root {
-  --paper: #efdcd4;
-  --card: #fffbf8;
-  --ink: #3a2432;
-  --ink-soft: #7d5d67;
-  --wax: #8e2440;
-  --wax-deep: #6e1b31;
-  --blush: #f0d9d6;
-  --radius: 22px;
-}
+const yesBtn = document.getElementById('yes-btn');
+const noBtn = document.getElementById('no-btn');
+const letterScreen = document.getElementById('letter-screen');
+const responseScreen = document.getElementById('response-screen');
+const backBtn = document.getElementById('back-btn');
 
-/* ===================================================================
-   Base
-   =================================================================== */
-* {
-  box-sizing: border-box;
-}
+/* -----------------------------------------------------------------
+   "No" button — dodges any attempt to hover, focus, tap, or click it.
+   ----------------------------------------------------------------- */
+function dodge() {
+  const rect = noBtn.getBoundingClientRect();
 
-html {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  min-height: 100%;
-  background-color: var(--paper);
-  background-image: radial-gradient(rgba(142, 36, 64, 0.06) 1px, transparent 1px);
-  background-size: 15px 15px;
-  color: var(--ink);
-  font-family: 'Lora', Georgia, 'Times New Roman', serif;
-  overflow-x: hidden;
-}
-
-/* ===================================================================
-   Layout — one screen visible at a time, cross-faded between
-   =================================================================== */
-.wrap {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 20px;
-}
-
-.screen {
-  display: none;
-  width: 100%;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.screen.active {
-  display: flex;
-}
-
-.screen.visible {
-  opacity: 1;
-  transform: none;
-}
-
-.card {
-  position: relative;
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: 0 26px 60px rgba(110, 27, 49, 0.20), 0 6px 18px rgba(110, 27, 49, 0.10);
-  padding: 60px 48px 48px;
-  max-width: 600px;
-  width: 100%;
-  text-align: center;
-  animation: card-rise 0.7s ease-out 0.15s both;
-}
-
-@keyframes card-rise {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: none; }
-}
-
-/* ===================================================================
-   Wax seal — the signature element. Sits astride the top edge of the
-   card, like a real seal holding the letter shut.
-   =================================================================== */
-.seal {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, #ac3f5f, var(--wax) 58%, var(--wax-deep) 100%);
-  box-shadow:
-    0 8px 16px rgba(110, 27, 49, 0.4),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.25),
-    inset 0 2px 3px rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 246, 244, 0.92);
-}
-
-.seal--intro {
-  animation: seal-stamp 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) both;
-}
-
-@keyframes seal-stamp {
-  0%   { transform: translateX(-50%) translateY(-46px) scale(1.6) rotate(-14deg); opacity: 0; }
-  55%  { transform: translateX(-50%) translateY(3px) scale(0.92) rotate(5deg); opacity: 1; }
-  78%  { transform: translateX(-50%) translateY(-2px) scale(1.04) rotate(-2deg); }
-  100% { transform: translateX(-50%) translateY(0) scale(1) rotate(0deg); opacity: 1; }
-}
-
-/* ===================================================================
-   Typography
-   =================================================================== */
-.salutation {
-  font-family: 'Fraunces', Georgia, serif;
-  font-weight: 700;
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
-  color: var(--wax-deep);
-  margin: 6px 0 18px;
-}
-
-.name {
-  font-style: italic;
-}
-
-.divider {
-  display: block;
-  width: 100%;
-  height: 10px;
-  color: var(--wax);
-  opacity: 0.32;
-  margin: 0 0 26px;
-}
-
-.letter-body p {
-  font-size: 1.06rem;
-  line-height: 1.75;
-  color: var(--ink);
-  margin: 0 0 20px;
-  text-align: left;
-}
-
-.letter-body p:last-child {
-  margin-bottom: 0;
-}
-
-.question {
-  font-family: 'Fraunces', Georgia, serif;
-  font-style: italic;
-  font-weight: 500;
-  font-size: 1.4rem;
-  color: var(--wax-deep);
-  margin: 32px 0 34px;
-}
-
-/* ===================================================================
-   Buttons — Yes dominates on purpose; No stays quiet and evasive.
-   =================================================================== */
-.button-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  flex-wrap: wrap;
-  min-height: 74px;
-}
-
-.btn {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: 600;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease,
-    left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.btn:focus-visible {
-  outline: 3px solid var(--wax-deep);
-  outline-offset: 3px;
-}
-
-.btn-yes {
-  background: var(--wax);
-  color: #fff6f4;
-  font-size: clamp(1.2rem, 2.6vw, 1.55rem);
-  padding: 20px 58px;
-  box-shadow: 0 12px 26px rgba(110, 27, 49, 0.32);
-}
-
-.btn-yes:hover {
-  background: var(--wax-deep);
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 16px 32px rgba(110, 27, 49, 0.38);
-}
-
-.btn-no {
-  background: var(--blush);
-  color: var(--ink-soft);
-  font-size: 0.88rem;
-  padding: 10px 22px;
-  z-index: 10;
-}
-
-.btn-back {
-  background: transparent;
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  padding: 10px 24px;
-  border: 1.5px solid var(--blush);
-  margin-top: 30px;
-}
-
-.btn-back:hover {
-  background: var(--blush);
-  color: var(--ink);
-}
-
-/* ===================================================================
-   Responsive
-   =================================================================== */
-@media (max-width: 480px) {
-  .card {
-    padding: 52px 26px 36px;
+  // The first time this runs, lock the button into fixed positioning
+  // at its current on-screen spot first, so it doesn't visually jump.
+  if (noBtn.style.position !== 'fixed') {
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = `${rect.left}px`;
+    noBtn.style.top = `${rect.top}px`;
+    noBtn.style.margin = '0';
+    void noBtn.offsetWidth; // force reflow so the browser registers the start position
   }
-  .button-row {
-    gap: 16px;
-  }
+
+  const padding = 16;
+  const maxLeft = Math.max(window.innerWidth - rect.width - padding, padding);
+  const maxTop = Math.max(window.innerHeight - rect.height - padding, padding);
+
+  const newLeft = padding + Math.random() * (maxLeft - padding);
+  const newTop = padding + Math.random() * (maxTop - padding);
+
+  noBtn.style.left = `${newLeft}px`;
+  noBtn.style.top = `${newTop}px`;
 }
 
-/* ===================================================================
-   Reduced motion
-   =================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .seal--intro {
-    animation: none;
-  }
-  .btn {
-    transition: background 0.15s ease;
-  }
-  .screen {
-    transition: none;
-  }
+noBtn.addEventListener('mouseenter', dodge);
+noBtn.addEventListener('focus', dodge);
+noBtn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  dodge();
+}, { passive: false });
+noBtn.addEventListener('click', (e) => {
+  // Safety net — if a click ever lands on it anyway, dodge and do nothing else.
+  e.preventDefault();
+  dodge();
+});
+
+window.addEventListener('resize', () => {
+  if (noBtn.style.position === 'fixed') dodge();
+});
+
+/* -----------------------------------------------------------------
+   "Yes" button — cross-fades from the letter to the response screen.
+   ----------------------------------------------------------------- */
+function showScreen(hide, show) {
+  hide.classList.remove('visible');
+  hide.addEventListener('transitionend', function onEnd() {
+    hide.classList.remove('active');
+    hide.removeEventListener('transitionend', onEnd);
+  }, { once: true });
+
+  show.classList.add('active');
+  void show.offsetWidth; // force reflow before transitioning in
+  requestAnimationFrame(() => show.classList.add('visible'));
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+yesBtn.addEventListener('click', () => {
+  showScreen(letterScreen, responseScreen);
+});
+
+backBtn.addEventListener('click', () => {
+  showScreen(responseScreen, letterScreen);
+});
