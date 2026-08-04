@@ -7,6 +7,28 @@ const responseScreen = document.getElementById('response-screen');
 const backBtn = document.getElementById('back-btn');
 
 /* -----------------------------------------------------------------
+   One-time intro animations — the card "rise" and the seal "stamp"
+   are meant to play once, on first load. A plain CSS animation
+   restarts on its own whenever its element's container goes from
+   display:none back to visible (e.g. the letter screen reappearing
+   after Back), which collided with the screen's own cross-fade
+   transition and showed up as a jitter. Removing each class the
+   moment its animation ends stops it from ever replaying.
+   ----------------------------------------------------------------- */
+function playOnce(el, className) {
+  if (!el) return;
+  const onEnd = (e) => {
+    if (e.target !== el) return; // ignore bubbled animationend events
+    el.removeEventListener('animationend', onEnd);
+    el.classList.remove(className);
+  };
+  el.addEventListener('animationend', onEnd);
+}
+
+playOnce(document.querySelector('.card--intro'), 'card--intro');
+playOnce(document.querySelector('.seal--intro'), 'seal--intro');
+
+/* -----------------------------------------------------------------
    "No" button — dodges any attempt to hover, focus, tap, or click it.
    ----------------------------------------------------------------- */
 function dodge() {
