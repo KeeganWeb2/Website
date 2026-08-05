@@ -30,6 +30,7 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
   min-height: 100%;
   background-color: var(--paper);
@@ -97,6 +98,163 @@ body {
 @keyframes card-rise {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: none; }
+}
+
+/* ===================================================================
+   Idea board — six photos "pinned" behind the letter card, shared by
+   both screens (the pinboard lives outside .screen and .wrap in the
+   markup, so the cross-fade between screens never touches it — it's
+   just always there).
+
+   On a wide window the photos scatter loosely around the card, like
+   snapshots pinned to a board behind it. Below ~980px there isn't
+   reliably enough room beside a 600px-wide card to scatter photos
+   without overlapping it or spilling off-screen, so under that
+   breakpoint this becomes a simple horizontal strip above the letter
+   instead — same photos, same pinned styling, just laid out in a row
+   that can never collide with anything.
+   =================================================================== */
+.pinboard {
+  position: static;
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 4px 20px 26px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pin-photo {
+  position: static;
+  flex: 0 0 auto;
+  width: 92px;
+  margin: 0;
+}
+
+/* Each photo's individual tilt — kept the same in both the strip and
+   scattered layouts so they read as hand-placed either way. */
+.pin-1 { transform: rotate(-7deg); }
+.pin-2 { transform: rotate(5deg); }
+.pin-3 { transform: rotate(-4deg); }
+.pin-4 { transform: rotate(6deg); }
+.pin-5 { transform: rotate(-8deg); }
+.pin-6 { transform: rotate(3deg); }
+
+.pin-photo__inner {
+  position: relative;
+  background: var(--card);
+  padding: 8px 8px 20px;
+  border-radius: 3px;
+  box-shadow: 0 10px 20px rgba(58, 36, 50, 0.22), 0 2px 6px rgba(58, 36, 50, 0.12);
+  animation: pin-fade 0.5s ease-out backwards;
+}
+
+/* Staggered entrance so the photos feel dropped into place one at a
+   time, after the card and seal have already arrived. */
+.pin-photo:nth-of-type(1) .pin-photo__inner { animation-delay: 0.45s; }
+.pin-photo:nth-of-type(2) .pin-photo__inner { animation-delay: 0.52s; }
+.pin-photo:nth-of-type(3) .pin-photo__inner { animation-delay: 0.59s; }
+.pin-photo:nth-of-type(4) .pin-photo__inner { animation-delay: 0.66s; }
+.pin-photo:nth-of-type(5) .pin-photo__inner { animation-delay: 0.73s; }
+.pin-photo:nth-of-type(6) .pin-photo__inner { animation-delay: 0.80s; }
+
+@keyframes pin-fade {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* A small wax pin or a strip of tape at the top of each photo,
+   alternating so the board doesn't feel too uniform. */
+.pin-photo__inner::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #ac3f5f, var(--wax) 58%, var(--wax-deep) 100%);
+  box-shadow: 0 3px 6px rgba(110, 27, 49, 0.35);
+}
+
+.pin-photo:nth-of-type(even) .pin-photo__inner::before {
+  width: 40px;
+  height: 18px;
+  top: -10px;
+  border-radius: 2px;
+  background: rgba(240, 217, 214, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 4px rgba(58, 36, 50, 0.15);
+}
+
+.pin-photo__inner img {
+  display: block;
+  width: 100%;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 1px;
+  background: var(--blush);
+}
+
+/* Placeholder shown until a real photo exists at that path — see the
+   onerror handler on each <img> in index.html. Keeps the board
+   looking intentional instead of broken while photos are still
+   being added, and doubles as an on-page reminder of each filename. */
+.pin-photo--empty .pin-photo__inner img {
+  display: none;
+}
+
+.pin-photo--empty .pin-photo__inner::after {
+  content: attr(data-file);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 88px;
+  background: repeating-linear-gradient(45deg, var(--blush), var(--blush) 6px, transparent 6px, transparent 12px);
+  border: 1.5px dashed rgba(110, 27, 49, 0.35);
+  border-radius: 1px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.64rem;
+  color: var(--ink-soft);
+  padding: 4px;
+}
+
+@media (min-width: 980px) {
+  /* Bounded to a box roughly the card's width plus margin, centered
+     on the page, rather than the full viewport — so the photos stay
+     snug around the card on an ultra-wide monitor instead of
+     drifting off toward the edges of the screen. */
+  .pinboard {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: min(92vw, 900px);
+    transform: translateX(-50%);
+    display: block;
+    overflow: visible;
+    padding: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .pin-photo {
+    position: absolute;
+    width: clamp(100px, 9vw, 140px);
+  }
+
+  .pin-1 { top: 6%;    left: 3%;   transform: rotate(-7deg); }
+  .pin-2 { top: 3%;    right: 5%;  transform: rotate(5deg); }
+  .pin-3 { top: 44%;   left: 0.5%; transform: rotate(-4deg); }
+  .pin-4 { top: 46%;   right: 1%;  transform: rotate(6deg); }
+  .pin-5 { bottom: 5%; left: 7%;   transform: rotate(-8deg); }
+  .pin-6 { bottom: 3%; right: 8%;  transform: rotate(3deg); }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 /* ===================================================================
@@ -263,7 +421,8 @@ body {
    =================================================================== */
 @media (prefers-reduced-motion: reduce) {
   .card--intro,
-  .seal--intro {
+  .seal--intro,
+  .pin-photo__inner {
     animation: none;
   }
   .btn {
